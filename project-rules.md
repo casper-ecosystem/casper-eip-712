@@ -18,6 +18,13 @@ cargo test --no-default-features  # verify no_std builds
 cd js && npm install && npm test
 ```
 
+## Git Identity
+All commits MUST use:
+- **Name**: `Michael Steuer`
+- **Email**: `michael@casper.network`
+
+This is configured in the repo's `.git/config`. Do NOT override with your own identity.
+
 ## Key Design Principles
 - API must mirror EIP-712 semantics exactly
 - Cross-language test vectors: Rust and TypeScript MUST produce identical hashes for same inputs
