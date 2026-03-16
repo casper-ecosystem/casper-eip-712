@@ -2,7 +2,7 @@
   "name": "casper-eip-712-test-vectors",
   "private": true,
   "scripts": {
-    "generate": "node generate-vectors.ts"
+    "generate": "npx tsx generate-vectors.ts"
   },
   "dependencies": {
     "ethers": "^6.16.0",

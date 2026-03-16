@@ -14,8 +14,6 @@ pub fn hash_typed_data(domain: &DomainSeparator, message: &impl Eip712Struct) ->
 
 #[cfg(test)]
 mod tests {
-    extern crate alloc;
-
     use alloc::vec::Vec;
 
     use super::*;

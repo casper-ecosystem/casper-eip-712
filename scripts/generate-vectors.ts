@@ -160,6 +160,7 @@ const vectors: Vector[] = [
     { Transfer: transferFields },
     {
       from: "0x1234567890abcdef1234567890abcdef12345678",
+      // Canonical lowercase hex on purpose; checksum casing is not required for hashing tests.
       to: "0x876543210fedcba9876543210fedcba987654321",
       value: "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
     },

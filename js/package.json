@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc",
     "test": "vitest",
-    "generate:vectors": "node ../scripts/generate-vectors.ts"
+    "generate:vectors": "npx tsx ../scripts/generate-vectors.ts"
   },
   "keywords": ["casper", "eip-712", "blockchain", "cryptography"],
   "license": "Apache-2.0",
