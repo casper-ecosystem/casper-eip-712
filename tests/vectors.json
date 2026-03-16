@@ -1,4 +1,26 @@
 {
-  "generatedAt": "placeholder",
-  "vectors": []
+  "generatedBy": "ethers.TypedDataEncoder.hash",
+  "generatedAt": "2026-03-16T01:51:12.803Z",
+  "vectors": [
+    {
+      "name": "permit_basic",
+      "primaryType": "Permit",
+      "domain": {
+        "name": "MyToken",
+        "version": "1",
+        "chainId": 1,
+        "verifyingContract": "0x1111111111111111111111111111111111111111"
+      },
+      "message": {
+        "owner": "0x2222222222222222222222222222222222222222",
+        "spender": "0x3333333333333333333333333333333333333333",
+        "value": "0x4444444444444444444444444444444444444444444444444444444444444444",
+        "nonce": "0x5555555555555555555555555555555555555555555555555555555555555555",
+        "deadline": "0x6666666666666666666666666666666666666666666666666666666666666666"
+      },
+      "domainSeparator": "0x98a000c59add584118697238deb65a508461c73c65bc49956fb97bfc568c30c8",
+      "structHash": "0x2feca5389c256a1ed1a2562e50b5aa9eec5ae8008a2f365726ca552672a7a8f1",
+      "digest": "0x647e5fecd3e0bae728bc3dae848eb34ca05f7972aec3274ba0b9388b123d1ba2"
+    }
+  ]
 }

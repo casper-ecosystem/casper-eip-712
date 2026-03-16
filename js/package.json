@@ -7,8 +7,12 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "test": "vitest"
+    "test": "vitest",
+    "generate:vectors": "node ../scripts/generate-vectors.ts"
   },
   "keywords": ["casper", "eip-712", "blockchain", "cryptography"],
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "ethers": "^6.16.0"
+  }
 }

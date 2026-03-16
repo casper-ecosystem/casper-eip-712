@@ -1,6 +1,6 @@
 [package]
 name = "casper-eip-712"
-version = "1.0.0"
+version = "0.1.0"
 edition = "2021"
 description = "EIP-712 typed data hashing and domain separation for Casper Network"
 license = "Apache-2.0"
