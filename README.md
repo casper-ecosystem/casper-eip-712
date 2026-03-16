@@ -197,7 +197,7 @@ The crate is designed for `#![no_std]` environments with `alloc` available, maki
 ## Development notes
 
 - Generate test vectors with `npm --prefix scripts run generate` (the generator is TypeScript and is executed with `tsx`).
-- `Cargo.lock` is intentionally not committed because this repository ships a library crate. Regenerate a fresh lockfile locally when auditing dependency resolution.
+- `Cargo.lock` is committed to pin `casper-client` to 5.0.0 (see note above about Odra compatibility). If you regenerate it, re-pin with `cargo update casper-client --precise 5.0.0`.
 
 ## Spec
 
