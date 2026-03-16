@@ -1,0 +1,37 @@
+[package]
+name = "permit-token"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+odra = { git = "https://github.com/odradev/odra", branch = "release/2.5.0", default-features = false }
+odra-modules = { git = "https://github.com/odradev/odra", branch = "release/2.5.0" }
+casper-eip-712 = { path = "../..", features = ["verify"] }
+
+[dev-dependencies]
+odra-test = { git = "https://github.com/odradev/odra", branch = "release/2.5.0", default-features = false }
+k256 = { version = "0.13", default-features = false, features = ["ecdsa"] }
+hex = "0.4"
+
+[build-dependencies]
+odra-build = { git = "https://github.com/odradev/odra", branch = "release/2.5.0", default-features = false }
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+odra-build = { git = "https://github.com/odradev/odra", branch = "release/2.5.0", default-features = false }
+odra-cli = { git = "https://github.com/odradev/odra", branch = "release/2.5.0" }
+
+[features]
+default = []
+
+[[bin]]
+name = "permit_token_build_contract"
+path = "src/bin/build_contract.rs"
+test = false
+
+[[bin]]
+name = "permit_token_build_schema"
+path = "src/bin/build_schema.rs"
+test = false

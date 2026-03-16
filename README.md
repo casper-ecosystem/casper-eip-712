@@ -76,6 +76,13 @@ let domain = DomainBuilder::new()
     .build();
 ```
 
+## Demo: Permit Token
+
+See [`examples/permit-token/`](./examples/permit-token/) for a complete working
+example — a CEP-18 token with gasless permit/approve using EIP-712 signatures,
+supporting both EVM-compatible and Casper-native domain separators. Includes a
+standalone TypeScript demo you can run without a Casper node.
+
 ## Feature flags
 
 - default: minimal hashing/encoding support
