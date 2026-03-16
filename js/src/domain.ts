@@ -12,6 +12,13 @@ const STANDARD_DOMAIN_FIELDS: { key: string; name: string; type: string }[] = [
   { key: "salt", name: "salt", type: "bytes32" },
 ];
 
+export const CASPER_DOMAIN_TYPES: TypedField[] = [
+  { name: "name", type: "string" },
+  { name: "version", type: "string" },
+  { name: "chain_name", type: "string" },
+  { name: "contract_package_hash", type: "bytes32" },
+];
+
 export function buildDomainTypeString(
   domain: EIP712Domain,
   domainTypes?: TypedField[],
@@ -24,6 +31,20 @@ function inferDomainTypes(domain: EIP712Domain): TypedField[] {
   return STANDARD_DOMAIN_FIELDS
     .filter((f) => domain[f.key] !== undefined && domain[f.key] !== null)
     .map((f) => ({ name: f.name, type: f.type }));
+}
+
+export function buildDomain(
+  name: string,
+  version: string,
+  chainName: string,
+  contractPackageHash: string,
+): EIP712Domain {
+  return {
+    name,
+    version,
+    chain_name: chainName,
+    contract_package_hash: contractPackageHash,
+  };
 }
 
 export function hashDomainSeparator(

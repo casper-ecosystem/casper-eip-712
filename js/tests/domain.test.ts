@@ -1,8 +1,24 @@
 import { describe, it, expect } from "vitest";
-import { hashDomainSeparator, buildDomainTypeString } from "../src/domain.js";
+import { buildDomain, CASPER_DOMAIN_TYPES, hashDomainSeparator, buildDomainTypeString } from "../src/domain.js";
 import { toHex } from "../src/utils.js";
 
 describe("domain", () => {
+  it("buildDomain creates the expected Casper-native domain object", () => {
+    expect(
+      buildDomain(
+        "CasperToken",
+        "1",
+        "casper-test",
+        "0x7777777777777777777777777777777777777777777777777777777777777777",
+      ),
+    ).toEqual({
+      name: "CasperToken",
+      version: "1",
+      chain_name: "casper-test",
+      contract_package_hash: "0x7777777777777777777777777777777777777777777777777777777777777777",
+    });
+  });
+
   it("standard EVM domain produces correct type hash", () => {
     const domain = {
       name: "Test",
@@ -49,19 +65,13 @@ describe("domain", () => {
   });
 
   it("matches vectors.json casper_native_domain_permit domain separator", () => {
-    const domain = {
-      name: "CasperToken",
-      version: "1",
-      chain_name: "casper-test",
-      contract_package_hash: "0x7777777777777777777777777777777777777777777777777777777777777777",
-    };
-    const domainTypes = [
-      { name: "name", type: "string" },
-      { name: "version", type: "string" },
-      { name: "chain_name", type: "string" },
-      { name: "contract_package_hash", type: "bytes32" },
-    ];
-    const hash = hashDomainSeparator(domain, domainTypes);
+    const domain = buildDomain(
+      "CasperToken",
+      "1",
+      "casper-test",
+      "0x7777777777777777777777777777777777777777777777777777777777777777",
+    );
+    const hash = hashDomainSeparator(domain, CASPER_DOMAIN_TYPES);
     expect(toHex(hash)).toBe(
       "0xb277bd5cc55f7517eaa22010c78cd3e74387ded279c8e3f8f29cc5ea31f2a402"
     );

@@ -24,3 +24,13 @@ export type TypeDefinitions = Record<string, TypedField[]>;
 export interface TypedDataOptions {
   domainTypes?: TypedField[];
 }
+
+/**
+ * Casper-native domain helper shape mirroring the Rust crate's common fields.
+ */
+export interface CasperDomain extends EIP712Domain {
+  name: string;
+  version: string;
+  chain_name: string;
+  contract_package_hash: string;
+}

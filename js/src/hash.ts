@@ -33,6 +33,19 @@ export function hashStruct(
   return keccak256(encoded);
 }
 
+function hashTypedDataFromHashes(domainHash: Uint8Array, structHash: Uint8Array): Uint8Array {
+  if (domainHash.length !== 32) throw new Error(`Domain separator must be 32 bytes, got ${domainHash.length}`);
+  if (structHash.length !== 32) throw new Error(`Struct hash must be 32 bytes, got ${structHash.length}`);
+
+  const data = new Uint8Array(66);
+  data[0] = 0x19;
+  data[1] = 0x01;
+  data.set(domainHash, 2);
+  data.set(structHash, 34);
+
+  return keccak256(data);
+}
+
 export function hashTypedData(
   domain: EIP712Domain,
   types: TypeDefinitions,
@@ -42,12 +55,26 @@ export function hashTypedData(
 ): Uint8Array {
   const domainHash = hashDomainSeparator(domain, options?.domainTypes);
   const structHash = hashStruct(primaryType, types, message);
+  return hashTypedDataFromHashes(domainHash, structHash);
+}
 
-  const data = new Uint8Array(66);
-  data[0] = 0x19;
-  data[1] = 0x01;
-  data.set(domainHash, 2);
-  data.set(structHash, 34);
+/**
+ * Convenience API mirroring the Rust crate's low-level surface:
+ * hashTypedData(domain, typeHash, encodedStruct) where encodedStruct does not include typeHash.
+ */
+export function hashTypedDataRaw(
+  domain: EIP712Domain,
+  typeHash: Uint8Array,
+  encodedStruct: Uint8Array,
+  options?: TypedDataOptions,
+): Uint8Array {
+  if (typeHash.length !== 32) throw new Error(`Type hash must be 32 bytes, got ${typeHash.length}`);
 
-  return keccak256(data);
+  const encoded = new Uint8Array(typeHash.length + encodedStruct.length);
+  encoded.set(typeHash, 0);
+  encoded.set(encodedStruct, typeHash.length);
+
+  const structHash = keccak256(encoded);
+  const domainHash = hashDomainSeparator(domain, options?.domainTypes);
+  return hashTypedDataFromHashes(domainHash, structHash);
 }

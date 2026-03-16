@@ -1,5 +1,5 @@
-export { hashTypedData, hashStruct } from "./hash.js";
-export { hashDomainSeparator, buildDomainTypeString } from "./domain.js";
+export { hashTypedData, hashTypedDataRaw, hashStruct } from "./hash.js";
+export { buildDomain, hashDomainSeparator, buildDomainTypeString, CASPER_DOMAIN_TYPES } from "./domain.js";
 export { computeTypeHash } from "./type-hash.js";
 
 export {
@@ -26,4 +26,4 @@ export {
   type TransferMessage,
 } from "./prebuilt/index.js";
 
-export type { EIP712Domain, TypedField, TypeDefinitions, TypedDataOptions } from "./types.js";
+export type { EIP712Domain, CasperDomain, TypedField, TypeDefinitions, TypedDataOptions } from "./types.js";

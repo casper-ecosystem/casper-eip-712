@@ -67,15 +67,56 @@ const digest = hashTypedData(domain, types, "Permit", message, {
 });
 ```
 
+## Rust-mirroring convenience helpers
+
+For callers that want the lower-level shape from the Rust crate, the package also exposes:
+
+```ts
+import {
+  buildDomain,
+  CASPER_DOMAIN_TYPES,
+  computeTypeHash,
+  encodeAddress,
+  encodeUint256,
+  hashTypedDataRaw,
+} from "@casper-ecosystem/casper-eip-712";
+
+const domain = buildDomain(
+  "CasperToken",
+  "1",
+  "casper-test",
+  "0x7777777777777777777777777777777777777777777777777777777777777777",
+);
+
+const typeHash = computeTypeHash(
+  "Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)",
+);
+
+const encodedStruct = new Uint8Array(32 * 5);
+encodedStruct.set(encodeAddress("0x2222222222222222222222222222222222222222"), 0);
+encodedStruct.set(encodeAddress("0x3333333333333333333333333333333333333333"), 32);
+encodedStruct.set(encodeUint256(1n), 64);
+encodedStruct.set(encodeUint256(0n), 96);
+encodedStruct.set(encodeUint256(999999n), 128);
+
+const digest = hashTypedDataRaw(domain, typeHash, encodedStruct, {
+  domainTypes: CASPER_DOMAIN_TYPES,
+});
+```
+
 ## API surface
 
+- `buildDomain(name, version, chainName, contractPackageHash)`
 - `hashDomainSeparator(domain, domainTypes?)`
 - `hashStruct(primaryType, types, message)`
 - `hashTypedData(domain, types, primaryType, message, options?)`
+- `hashTypedDataRaw(domain, typeHash, encodedStruct, options?)`
+- `computeTypeHash(typeString)`
 - `recoverAddress(digest, signature)`
 - `recoverTypedDataSigner(domain, types, primaryType, message, signature, options?)`
 - `verifySignature(digest, signature, expectedAddress)`
 - Encoding helpers: `encodeAddress`, `encodeUint256`, `encodeUint64`, `encodeBytes32`, `encodeBytes`, `encodeString`, `encodeBool`, `encodeField`
+- Domain helpers: `CASPER_DOMAIN_TYPES`, `buildDomainTypeString`
 - Prebuilt message types: `PermitTypes`, `ApprovalTypes`, `TransferTypes`
 
 ## Development

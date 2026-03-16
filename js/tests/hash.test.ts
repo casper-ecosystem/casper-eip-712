@@ -1,5 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { hashStruct, hashTypedData } from "../src/hash.js";
+import { hashStruct, hashTypedData, hashTypedDataRaw } from "../src/hash.js";
+import { buildDomain, CASPER_DOMAIN_TYPES } from "../src/domain.js";
+import { encodeAddress, encodeUint256 } from "../src/encoding.js";
+import { computeTypeHash } from "../src/type-hash.js";
 import { buildCanonicalTypeString } from "../src/type-string.js";
 import { toHex } from "../src/utils.js";
 
@@ -90,5 +93,54 @@ describe("hashTypedData", () => {
     const types = { Simple: [{ name: "value", type: "uint256" }] };
     const digest = hashTypedData(domain, types, "Simple", { value: 42n });
     expect(digest.length).toBe(32);
+  });
+
+  it("hashTypedDataRaw matches the high-level API for Casper-native Permit data", () => {
+    const domain = buildDomain(
+      "CasperToken",
+      "1",
+      "casper-test",
+      "0x7777777777777777777777777777777777777777777777777777777777777777",
+    );
+
+    const encodedStruct = new Uint8Array(32 * 5);
+    encodedStruct.set(encodeAddress("0x2222222222222222222222222222222222222222"), 0);
+    encodedStruct.set(encodeAddress("0x3333333333333333333333333333333333333333"), 32);
+    encodedStruct.set(
+      encodeUint256("0x4444444444444444444444444444444444444444444444444444444444444444"),
+      64,
+    );
+    encodedStruct.set(
+      encodeUint256("0x5555555555555555555555555555555555555555555555555555555555555555"),
+      96,
+    );
+    encodedStruct.set(
+      encodeUint256("0x6666666666666666666666666666666666666666666666666666666666666666"),
+      128,
+    );
+
+    const typeHash = computeTypeHash(
+      "Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)",
+    );
+
+    const rawDigest = hashTypedDataRaw(domain, typeHash, encodedStruct, {
+      domainTypes: CASPER_DOMAIN_TYPES,
+    });
+
+    const genericDigest = hashTypedData(
+      domain,
+      permitTypes,
+      "Permit",
+      {
+        owner: "0x2222222222222222222222222222222222222222",
+        spender: "0x3333333333333333333333333333333333333333",
+        value: "0x4444444444444444444444444444444444444444444444444444444444444444",
+        nonce: "0x5555555555555555555555555555555555555555555555555555555555555555",
+        deadline: "0x6666666666666666666666666666666666666666666666666666666666666666",
+      },
+      { domainTypes: CASPER_DOMAIN_TYPES },
+    );
+
+    expect(toHex(rawDigest)).toBe(toHex(genericDigest));
   });
 });
