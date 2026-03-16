@@ -124,6 +124,7 @@ fn test_permit_expired_deadline_reverts() {
     let value = U256::from(100u64);
     let nonce = U256::zero();
     env.advance_block_time(1);
+    // The block time is now 1, so a deadline of 0 is already expired.
     let deadline = 0u64;
     let signature = sign_digest(&key, hash_typed_data(&evm_domain(&token), &build_permit(owner_eth, &spender, value, nonce, deadline)));
 

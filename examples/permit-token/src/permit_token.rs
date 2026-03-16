@@ -19,6 +19,7 @@ pub enum Error {
     InvalidSignature = 30_002,
     MalformedSignature = 30_003,
     InvalidOwnerEthAddress = 30_004,
+    UnauthorizedMint = 30_005,
 }
 
 #[odra::module(errors = Error)]
@@ -150,6 +151,8 @@ impl PermitToken {
     }
 
     pub fn mint_to(&mut self, recipient: Address, amount: U256) {
+        // DEMO ONLY: this helper stays intentionally unrestricted so the example and tests can mint
+        // balances without adding a separate admin model. Do not copy this into production unchanged.
         self.token.raw_mint(&recipient, &amount);
     }
 }

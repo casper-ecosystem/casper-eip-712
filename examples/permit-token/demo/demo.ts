@@ -43,7 +43,7 @@ const casperDomain = {
 const casperDomainTypes: TypedField[] = CASPER_DOMAIN_TYPES;
 
 console.log("Step 2: Built EIP-712 domains");
-console.log(` EVM domain: name=\"${TOKEN_NAME}\", chainId=131614895`);
+console.log(` EVM domain: name=\"${TOKEN_NAME}\", chainId=1314614895`);
 console.log(` Casper domain: name=\"${TOKEN_NAME}\", chain_name=\"casper\"`);
 console.log(` EVM separator: ${toHex(hashDomainSeparator(evmDomain))}`);
 console.log(` Casper separator: ${toHex(hashDomainSeparator(casperDomain, casperDomainTypes))}\n`);

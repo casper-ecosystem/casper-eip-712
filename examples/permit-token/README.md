@@ -202,6 +202,7 @@ But it is still a demo.
 
 Before using this pattern in production, you should:
 
+- replace demo-only helpers like unrestricted `mint_to()` with explicit access control,
 - audit the allowance storage design,
 - review how owner identity maps from Ethereum-style addresses to Casper-side authority,
 - confirm your domain schema is stable and documented,
@@ -215,3 +216,14 @@ Before using this pattern in production, you should:
 - Uniswap Permit2
 - Rust crate: [`casper-eip-712`](../..)
 - TypeScript package: [`js/`](../../js)
+[`js/`](../../js)
+- perform a proper security review.
+
+## Related references
+
+- ERC-2612 / ERC20 Permit
+- OpenZeppelin `ERC20Permit`
+- Uniswap Permit2
+- Rust crate: [`casper-eip-712`](../..)
+- TypeScript package: [`js/`](../../js)
+[`js/`](../../js)
