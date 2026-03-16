@@ -1,5 +1,7 @@
+import type { TypeDefinitions } from "./types.js";
 import { keccak256 } from "./keccak.js";
 import { fromHex } from "./utils.js";
+import { hashStruct } from "./hash.js";
 
 /**
  * Encode an Ethereum address (0x-prefixed 20-byte hex) as a 32-byte left-padded value.
@@ -84,7 +86,11 @@ function assertIntegerLikeValue(type: string, value: unknown): asserts value is 
   throw new Error(`${type} value must be a string, bigint, or number`);
 }
 
-export function encodeField(type: string, value: unknown): Uint8Array {
+export function encodeField(
+  type: string,
+  value: unknown,
+  types?: TypeDefinitions,
+): Uint8Array {
   switch (type) {
     case "address":
       return encodeAddress(String(value));
@@ -103,6 +109,9 @@ export function encodeField(type: string, value: unknown): Uint8Array {
       if (type.startsWith("uint") || type.startsWith("int")) {
         assertIntegerLikeValue(type, value);
         return encodeUint256(value);
+      }
+      if (types?.[type]) {
+        return hashStruct(type, types, value as Record<string, unknown>);
       }
       throw new Error(`Unsupported EIP-712 type: ${type}`);
   }

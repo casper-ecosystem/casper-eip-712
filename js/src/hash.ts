@@ -3,13 +3,7 @@ import { keccak256 } from "./keccak.js";
 import { encodeField } from "./encoding.js";
 import { computeTypeHash } from "./type-hash.js";
 import { hashDomainSeparator } from "./domain.js";
-
-function buildTypeString(primaryType: string, types: TypeDefinitions): string {
-  const fields = types[primaryType];
-  if (!fields) throw new Error(`Type "${primaryType}" not found in type definitions`);
-  const inner = fields.map((f) => `${f.type} ${f.name}`).join(",");
-  return `${primaryType}(${inner})`;
-}
+import { buildCanonicalTypeString } from "./type-string.js";
 
 export function hashStruct(
   primaryType: string,
@@ -19,13 +13,13 @@ export function hashStruct(
   const fields = types[primaryType];
   if (!fields) throw new Error(`Type "${primaryType}" not found in type definitions`);
 
-  const typeString = buildTypeString(primaryType, types);
+  const typeString = buildCanonicalTypeString(primaryType, types);
   const typeHash = computeTypeHash(typeString);
 
   const parts: Uint8Array[] = [typeHash];
   for (const field of fields) {
     const value = message[field.name];
-    parts.push(encodeField(field.type, value));
+    parts.push(encodeField(field.type, value, types));
   }
 
   const totalLength = parts.reduce((sum, p) => sum + p.length, 0);

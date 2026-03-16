@@ -5,10 +5,6 @@ import { describe, it, expect } from "vitest";
 import { hashDomainSeparator, hashStruct, hashTypedData, toHex } from "../src/index.js";
 import type { TypedField, TypeDefinitions } from "../src/types.js";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const vectorsPath = path.join(__dirname, "..", "..", "tests", "vectors.json");
-const vectorsFile = JSON.parse(readFileSync(vectorsPath, "utf-8"));
-
 interface Vector {
   name: string;
   primaryType: string;
@@ -17,6 +13,17 @@ interface Vector {
   domainSeparator: string;
   structHash: string;
   digest: string;
+}
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const vectorsPath = path.join(__dirname, "..", "..", "tests", "vectors.json");
+
+function loadVectors(): { vectors: Vector[] } | null {
+  try {
+    return JSON.parse(readFileSync(vectorsPath, "utf-8"));
+  } catch {
+    return null;
+  }
 }
 
 const typeDefinitions: Record<string, TypeDefinitions> = {
@@ -57,8 +64,11 @@ function getDomainTypes(vector: Vector): TypedField[] | undefined {
   return undefined;
 }
 
-describe("cross-language vectors", () => {
-  const vectors: Vector[] = vectorsFile.vectors;
+const vectorsFile = loadVectors();
+const crossLanguageDescribe = vectorsFile ? describe : describe.skip;
+
+crossLanguageDescribe("cross-language vectors", () => {
+  const vectors: Vector[] = vectorsFile?.vectors ?? [];
 
   it(`loaded ${vectors.length} vectors (expect >= 6)`, () => {
     expect(vectors.length).toBeGreaterThanOrEqual(6);

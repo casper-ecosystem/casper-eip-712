@@ -36,7 +36,7 @@ const message: PermitMessage = {
   deadline: "0xffff",
 };
 
-const signature = new Uint8Array(65); // r || s || v
+const signature = new Uint8Array(65); // Illustrative placeholder only; use a real 65-byte signature in production.
 const digest = hashTypedData(domain, PermitTypes, "Permit", message);
 const signer = recoverTypedDataSigner(domain, PermitTypes, "Permit", message, signature);
 const isValid = verifySignature(digest, signature, "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");

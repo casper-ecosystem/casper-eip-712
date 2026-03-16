@@ -2,6 +2,7 @@ import type { EIP712Domain, TypedField } from "./types.js";
 import { keccak256 } from "./keccak.js";
 import { encodeField } from "./encoding.js";
 import { computeTypeHash } from "./type-hash.js";
+import { buildTypeString } from "./type-string.js";
 
 const STANDARD_DOMAIN_FIELDS: { key: string; name: string; type: string }[] = [
   { key: "name", name: "name", type: "string" },
@@ -16,8 +17,7 @@ export function buildDomainTypeString(
   domainTypes?: TypedField[],
 ): string {
   const fields = domainTypes ?? inferDomainTypes(domain);
-  const inner = fields.map((f) => `${f.type} ${f.name}`).join(",");
-  return `EIP712Domain(${inner})`;
+  return buildTypeString("EIP712Domain", fields);
 }
 
 function inferDomainTypes(domain: EIP712Domain): TypedField[] {

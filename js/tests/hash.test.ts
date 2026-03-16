@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { hashStruct, hashTypedData } from "../src/hash.js";
+import { buildCanonicalTypeString } from "../src/type-string.js";
 import { toHex } from "../src/utils.js";
 
 const permitTypes = {
@@ -24,6 +25,43 @@ describe("hashStruct", () => {
     expect(toHex(hash)).toBe(
       "0x2feca5389c256a1ed1a2562e50b5aa9eec5ae8008a2f365726ca552672a7a8f1"
     );
+  });
+});
+
+describe("nested struct support", () => {
+  const nestedTypes = {
+    Person: [
+      { name: "name", type: "string" },
+      { name: "wallet", type: "address" },
+    ],
+    Mail: [
+      { name: "from", type: "Person" },
+      { name: "to", type: "Person" },
+      { name: "contents", type: "string" },
+    ],
+  };
+
+  const nestedMessage = {
+    from: {
+      name: "Alice",
+      wallet: "0xcd2a3d9f938e13cd947ec05abc7fe734df8dd826",
+    },
+    to: {
+      name: "Bob",
+      wallet: "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    },
+    contents: "Hello, Bob!",
+  };
+
+  it("builds the canonical type string including referenced structs", () => {
+    expect(buildCanonicalTypeString("Mail", nestedTypes)).toBe(
+      "Mail(Person from,Person to,string contents)Person(string name,address wallet)"
+    );
+  });
+
+  it("hashes nested structs using recursive struct encoding", () => {
+    const hash = hashStruct("Mail", nestedTypes, nestedMessage);
+    expect(toHex(hash)).toBe("0xa12982453ebbee5f1d3f6e31ee4ef3d4868d7def3f17d3aedcff283f3b58878e");
   });
 });
 
