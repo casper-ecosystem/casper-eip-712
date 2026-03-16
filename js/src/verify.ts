@@ -1,7 +1,7 @@
 import { secp256k1 } from "@noble/curves/secp256k1";
 import { keccak256 } from "./keccak.js";
 import { hashTypedData } from "./hash.js";
-import { fromHex } from "./utils.js";
+import { fromHex, toHex } from "./utils.js";
 import type { EIP712Domain, TypeDefinitions, TypedDataOptions } from "./types.js";
 
 function pubKeyToAddress(pubKeyUncompressed: Uint8Array): Uint8Array {
@@ -16,8 +16,8 @@ export function recoverAddress(digest: Uint8Array, signature: Uint8Array): Uint8
   if (v >= 27) v -= 27;
   if (v > 1) throw new Error(`Invalid recovery id: ${signature[64]}`);
 
-  const r = BigInt("0x" + Array.from(signature.slice(0, 32), (b) => b.toString(16).padStart(2, "0")).join(""));
-  const s = BigInt("0x" + Array.from(signature.slice(32, 64), (b) => b.toString(16).padStart(2, "0")).join(""));
+  const r = BigInt(toHex(signature.slice(0, 32)));
+  const s = BigInt(toHex(signature.slice(32, 64)));
 
   const sig = new secp256k1.Signature(r, s);
   const pubKey = sig.addRecoveryBit(v).recoverPublicKey(digest).toRawBytes(false);

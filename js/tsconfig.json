@@ -13,5 +13,6 @@
     "rootDir": "src"
   },
   "include": ["src"],
+  // Tests are intentionally excluded here; Vitest handles them separately and the library build only emits src/.
   "exclude": ["node_modules", "dist", "tests"]
 }

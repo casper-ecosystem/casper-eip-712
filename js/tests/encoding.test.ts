@@ -58,7 +58,7 @@ describe("encoding", () => {
 
   describe("encodeBytes32", () => {
     it("passes through 32 bytes", () => {
-      const hex = "0xabababababababababababababababababababababababababababababababab";
+      const hex = "0x" + "ab".repeat(32);
       const encoded = encodeBytes32(hex);
       expect(encoded.length).toBe(32);
       expect(encoded.every((b) => b === 0xab)).toBe(true);

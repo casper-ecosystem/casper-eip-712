@@ -15,6 +15,7 @@ npm install @casper-ecosystem/casper-eip-712
 ```ts
 import {
   hashTypedData,
+  recoverTypedDataSigner,
   verifySignature,
   PermitTypes,
   type PermitMessage,
@@ -35,19 +36,10 @@ const message: PermitMessage = {
   deadline: "0xffff",
 };
 
+const signature = new Uint8Array(65); // r || s || v
 const digest = hashTypedData(domain, PermitTypes, "Permit", message);
-
-const signer = verifySignature(
-  domain,
-  PermitTypes,
-  "Permit",
-  message,
-  {
-    r: "0x...",
-    s: "0x...",
-    v: 27,
-  },
-);
+const signer = recoverTypedDataSigner(domain, PermitTypes, "Permit", message, signature);
+const isValid = verifySignature(digest, signature, "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 ```
 
 ## Casper-specific domains
