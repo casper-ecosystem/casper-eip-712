@@ -1,0 +1,19 @@
+import type { TypeDefinitions } from "../types.js";
+
+export interface PermitMessage {
+  owner: string;
+  spender: string;
+  value: string | bigint;
+  nonce: string | bigint;
+  deadline: string | bigint;
+}
+
+export const PermitTypes: TypeDefinitions = {
+  Permit: [
+    { name: "owner", type: "address" },
+    { name: "spender", type: "address" },
+    { name: "value", type: "uint256" },
+    { name: "nonce", type: "uint256" },
+    { name: "deadline", type: "uint256" },
+  ],
+};
