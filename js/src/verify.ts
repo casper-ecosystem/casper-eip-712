@@ -9,6 +9,11 @@ function pubKeyToAddress(pubKeyUncompressed: Uint8Array): Uint8Array {
   return hash.slice(12);
 }
 
+/**
+ * Recover the signer address bytes from a digest and 65-byte secp256k1 signature.
+ *
+ * Returns the raw 20-byte address as a Uint8Array, not a hex or checksummed string.
+ */
 export function recoverAddress(digest: Uint8Array, signature: Uint8Array): Uint8Array {
   if (signature.length !== 65) throw new Error(`Signature must be 65 bytes, got ${signature.length}`);
 
@@ -39,6 +44,11 @@ export function verifySignature(
   }
 }
 
+/**
+ * Recover the signer address bytes for typed data.
+ *
+ * Returns the raw 20-byte address as a Uint8Array, not a hex or checksummed string.
+ */
 export function recoverTypedDataSigner(
   domain: EIP712Domain,
   types: TypeDefinitions,

@@ -110,6 +110,8 @@ export function encodeField(
         assertIntegerLikeValue(type, value);
         return encodeUint256(value);
       }
+      // TODO: support fixed-size bytes1..bytes31 if/when callers need them.
+      // EIP-712 encodes these as the raw value right-padded to 32 bytes.
       if (types?.[type]) {
         return hashStruct(type, types, value as Record<string, unknown>);
       }

@@ -74,7 +74,7 @@ const digest = hashTypedData(domain, types, "Permit", message, {
 - `hashTypedData(domain, types, primaryType, message, options?)`
 - `recoverAddress(digest, signature)`
 - `recoverTypedDataSigner(domain, types, primaryType, message, signature, options?)`
-- `verifySignature(domain, types, primaryType, message, signature, options?)`
+- `verifySignature(digest, signature, expectedAddress)`
 - Encoding helpers: `encodeAddress`, `encodeUint256`, `encodeUint64`, `encodeBytes32`, `encodeBytes`, `encodeString`, `encodeBool`, `encodeField`
 - Prebuilt message types: `PermitTypes`, `ApprovalTypes`, `TransferTypes`
 
