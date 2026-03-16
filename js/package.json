@@ -1,18 +1,45 @@
 {
-  "name": "casper-eip-712",
-  "version": "0.1.0",
-  "description": "EIP-712 style typed data hashing for Casper Network (TypeScript)",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "name": "@casper-ecosystem/casper-eip-712",
+  "version": "1.0.0",
+  "description": "EIP-712 typed data hashing and verification for Casper Network",
   "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": ["dist"],
   "scripts": {
-    "build": "tsc",
-    "test": "vitest",
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "generate:vectors": "npx tsx ../scripts/generate-vectors.ts"
   },
-  "keywords": ["casper", "eip-712", "blockchain", "cryptography"],
+  "keywords": ["casper", "eip-712", "blockchain", "cryptography", "typed-data"],
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aspect-build/casper-eip-712",
+    "directory": "js"
+  },
+  "dependencies": {
+    "@noble/hashes": "^1.7.0",
+    "@noble/curves": "^1.8.0"
+  },
   "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0",
     "ethers": "^6.16.0"
   }
 }
