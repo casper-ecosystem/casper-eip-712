@@ -147,6 +147,44 @@ example — a CEP-18 token with gasless permit/approve using EIP-712 signatures,
 supporting both EVM-compatible and Casper-native domain separators. Includes a
 standalone TypeScript demo you can run without a Casper node.
 
+## Future Use Cases
+
+### Gasless Transactions and Relayer Services
+
+EIP-712 signatures enable a "gasless" user experience where token owners authorize actions by signing a typed message off-chain — without submitting a transaction or paying gas. A relayer or counterparty submits the signed authorization on-chain on their behalf.
+
+This pattern, widely adopted on Ethereum as ERC-2612 (used by Uniswap, Aave, OpenSea, and others), becomes possible on Casper through this crate:
+
+1. A user signs an EIP-712 `Permit` message with their private key (off-chain, zero cost)
+2. A relayer or dApp backend submits the permit to the Casper contract, paying the deploy cost
+3. The contract verifies the signature, recovers the signer, and executes the authorized action
+
+This unlocks several powerful patterns:
+- **User onboarding without CSPR** — new users can interact with dApps before acquiring native tokens for gas
+- **Meta-transactions** — dApp operators subsidize gas costs to reduce friction
+- **Batch authorization** — a relayer collects multiple signed permits and submits them in a single deploy
+
+### Agentic Transactions via x402
+
+The [x402 protocol](https://www.x402.org/) enables AI agents to pay for API access and services using HTTP 402 payment flows with stablecoins. EIP-712 typed data signing is the natural authorization layer for agent-initiated transactions on Casper:
+
+- An AI agent signs a structured, domain-separated payment authorization
+- A facilitator or smart contract verifies the signature and executes the payment
+- The typed data schema makes the authorization human-readable and auditable — critical when autonomous agents are moving value
+
+As x402 expands to Casper, `casper-eip-712` provides the cryptographic foundation for agents to sign verifiable, scoped authorizations that smart contracts can trust.
+
+### Cross-Chain Bridge and Multi-Chain Domain Separation
+
+In multi-chain environments — bridges, cross-chain messaging protocols, and multi-deployment systems — domain separation is critical for security. Without it, a signature intended for one deployment or chain can be replayed against another, potentially draining funds or corrupting state.
+
+EIP-712 domain separators solve this by binding every signature to a specific:
+- **Contract identity** (address or package hash)
+- **Chain** (chain ID or chain name)
+- **Version** (protocol version for upgrade safety)
+
+This crate's `DomainBuilder` supports both standard EVM fields (`chainId`, `verifyingContract`) and Casper-native fields (`chain_name`, `contract_package_hash`), making it suitable for hybrid environments where Casper contracts verify attestations originating from EVM chains — or where multiple Casper deployments (testnet, mainnet, staging) must be cryptographically isolated from each other.
+
 ## Feature flags
 
 - default: minimal hashing/encoding support
