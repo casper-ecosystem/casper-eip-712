@@ -85,6 +85,11 @@ let domain = DomainBuilder::new()
 
 The crate is designed for `#![no_std]` environments with `alloc` available, making it suitable for WASM-based contract targets.
 
+## Development notes
+
+- Generate test vectors with `npm --prefix scripts run generate` (the generator is TypeScript and is executed with `tsx`).
+- `Cargo.lock` is intentionally not committed because this repository ships a library crate. Regenerate a fresh lockfile locally when auditing dependency resolution.
+
 ## Spec
 
 - EIP-712: <https://eips.ethereum.org/EIPS/eip-712>

@@ -1,6 +1,6 @@
 {
   "generatedBy": "ethers.TypedDataEncoder.hash",
-  "generatedAt": "2026-03-16T01:55:44.739Z",
+  "generatedAt": "2026-03-16T04:39:16.969Z",
   "vectors": [
     {
       "name": "permit_basic",
