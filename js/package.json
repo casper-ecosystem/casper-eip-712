@@ -18,18 +18,26 @@
       }
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "test": "vitest run",
     "test:watch": "vitest",
     "generate:vectors": "npx tsx ../scripts/generate-vectors.ts"
   },
-  "keywords": ["casper", "eip-712", "blockchain", "cryptography", "typed-data"],
+  "keywords": [
+    "casper",
+    "eip-712",
+    "blockchain",
+    "cryptography",
+    "typed-data"
+  ],
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aspect-build/casper-eip-712",
+    "url": "https://github.com/casper-ecosystem/casper-eip-712",
     "directory": "js"
   },
   "dependencies": {

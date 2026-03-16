@@ -7,7 +7,7 @@ version = "0.1.0"
 edition = "2021"
 description = "EIP-712 typed data hashing and domain separation for Casper Network"
 license = "Apache-2.0"
-repository = "https://github.com/make-software/casper-eip-712"
+repository = "https://github.com/casper-ecosystem/casper-eip-712"
 keywords = ["casper", "eip-712", "crypto", "blockchain", "signing"]
 categories = ["cryptography", "no-std"]
 
