@@ -1,0 +1,17 @@
+{
+  "name": "casper-eip-712-viem-example",
+  "version": "1.0.0",
+  "description": "EIP-712 typed data signing with viem and casper-eip-712",
+  "type": "module",
+  "scripts": {
+    "demo": "npx tsx demo.ts"
+  },
+  "dependencies": {
+    "@casper-ecosystem/casper-eip-712": "^1.1.0",
+    "viem": "^2.0.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
+}
