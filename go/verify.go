@@ -10,21 +10,23 @@ import (
 )
 
 // RecoverAddress recovers the 20-byte Ethereum address from digest and a
-// 65-byte secp256k1 signature (r || s || v, where v is 0 or 1).
+// 65-byte secp256k1 signature (r || s || v).
+//
+// Accepts v in {0, 1} (raw recovery id) or {27, 28} (Ethereum legacy form);
+// 27/28 is normalized to 0/1 before recovery to match the Rust and JS
+// implementations in this repo and the behavior of common Ethereum wallets.
 func RecoverAddress(digest [32]byte, signature [65]byte) ([20]byte, error) {
-	// Ethereum signature format: r (32) || s (32) || v (1)
-	// v must be 0 or 1 (not 27/28)
 	v := signature[64]
-	if v != 0 && v != 1 {
-		return [20]byte{}, fmt.Errorf("eip712: invalid recovery id %d (must be 0 or 1)", v)
+	if v >= 27 {
+		v -= 27
+	}
+	if v > 1 {
+		return [20]byte{}, fmt.Errorf("eip712: invalid recovery id %d (must be 0, 1, 27, or 28)", signature[64])
 	}
 
-	// secp256k1 library uses [v, r, s] order internally for recovery
-	// Build compact sig: [v+27, r..., s...] - some libs expect 27/28
-	// decred/secp256k1 RecoverCompact expects [v, r, s] with v as 0/1
-	// Build the 65-byte compact sig in [v || r || s] format expected by RecoverCompact
+	// decred/secp256k1 RecoverCompact expects the leading byte to be 27 + recovery_bit.
 	var compactSig [65]byte
-	compactSig[0] = v + 27                    // RecoverCompact expects 27 or 28
+	compactSig[0] = v + 27
 	copy(compactSig[1:33], signature[:32])    // r
 	copy(compactSig[33:65], signature[32:64]) // s
 
