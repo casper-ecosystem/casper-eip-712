@@ -108,6 +108,13 @@ func TestEncodeUint256One(t *testing.T) {
 	}
 }
 
+func TestEncodeUint256NilErrors(t *testing.T) {
+	_, err := eip712.EncodeUint256(nil)
+	if err == nil {
+		t.Error("EncodeUint256(nil) expected error, got nil")
+	}
+}
+
 func TestEncodeUint256NegativeErrors(t *testing.T) {
 	_, err := eip712.EncodeUint256(big.NewInt(-1))
 	if err == nil {

@@ -66,6 +66,20 @@ func TestHashDomainSeparatorPartialDomain(t *testing.T) {
 	}
 }
 
+func TestHashDomainSeparatorExplicitChainIdNilErrors(t *testing.T) {
+	name := "T"
+	ver := "1"
+	domain := eip712.EIP712Domain{Name: &name, Version: &ver} // ChainID intentionally nil
+	opts := &eip712.TypedDataOptions{DomainTypes: []eip712.TypedField{
+		{Name: "name", Type: "string"},
+		{Name: "version", Type: "string"},
+		{Name: "chainId", Type: "uint256"},
+	}}
+	if _, err := eip712.HashDomainSeparator(domain, opts); err == nil {
+		t.Error("HashDomainSeparator with explicit chainId but nil ChainID expected error, got nil")
+	}
+}
+
 func TestHashDomainSeparatorDeterministic(t *testing.T) {
 	domain := eip712.BuildDomain("A", "1", "casper", mustBytes32("0x"+strings.Repeat("aa", 32)))
 	opts := &eip712.TypedDataOptions{DomainTypes: eip712.CasperDomainTypes}

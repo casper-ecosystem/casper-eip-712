@@ -23,10 +23,10 @@ func EncodeAddress(addr Address) [32]byte {
 }
 
 // EncodeUint256 encodes a non-negative integer as a 32-byte big-endian slot.
-// Returns an error if value is negative or exceeds 32 bytes.
+// Returns an error if value is nil, negative, or exceeds 32 bytes.
 func EncodeUint256(value *big.Int) ([32]byte, error) {
 	if value == nil {
-		return [32]byte{}, nil
+		return [32]byte{}, fmt.Errorf("eip712: uint256 value must not be nil")
 	}
 	if value.Sign() < 0 {
 		return [32]byte{}, fmt.Errorf("eip712: uint256 value must be non-negative")
