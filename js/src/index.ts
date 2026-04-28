@@ -1,4 +1,5 @@
 export { hashTypedData, hashTypedDataRaw, hashStruct } from "./hash.js";
+export { buildCanonicalTypeString } from "./type-string.js";
 export { buildDomain, hashDomainSeparator, buildDomainTypeString, CASPER_DOMAIN_TYPES } from "./domain.js";
 export { computeTypeHash } from "./type-hash.js";
 

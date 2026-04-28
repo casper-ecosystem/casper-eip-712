@@ -67,6 +67,31 @@ const digest = hashTypedData(domain, types, "Permit", message, {
 });
 ```
 
+## Building the canonical type string
+
+When you need the EIP-712 canonical type string for a primary type use `buildCanonicalTypeString`. It resolves nested struct dependencies and appends them in alphabetical order, as required by the EIP-712 spec.
+
+```ts
+import { buildCanonicalTypeString, computeTypeHash } from "@casper-ecosystem/casper-eip-712";
+
+const types = {
+  Person: [
+    { name: "name", type: "string" },
+    { name: "wallet", type: "address" },
+  ],
+  Mail: [
+    { name: "from", type: "Person" },
+    { name: "to", type: "Person" },
+    { name: "contents", type: "string" },
+  ],
+};
+
+const typeString = buildCanonicalTypeString("Mail", types);
+// "Mail(Person from,Person to,string contents)Person(string name,address wallet)"
+
+const typeHash = computeTypeHash(typeString);
+```
+
 ## Rust-mirroring convenience helpers
 
 For callers that want the lower-level shape from the Rust crate, the package also exposes:
@@ -111,6 +136,7 @@ const digest = hashTypedDataRaw(domain, typeHash, encodedStruct, {
 - `hashStruct(primaryType, types, message)`
 - `hashTypedData(domain, types, primaryType, message, options?)`
 - `hashTypedDataRaw(domain, typeHash, encodedStruct, options?)`
+- `buildCanonicalTypeString(primaryType, types)`
 - `computeTypeHash(typeString)`
 - `recoverAddress(digest, signature)`
 - `recoverTypedDataSigner(domain, types, primaryType, message, signature, options?)`
