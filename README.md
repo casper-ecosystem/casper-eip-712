@@ -200,7 +200,7 @@ EIP-712 domain separators solve this by binding every signature to a specific:
 - **Chain** (chain ID or chain name)
 - **Version** (protocol version for upgrade safety)
 
-This crate's `DomainBuilder` supports both standard EVM fields (`chainId`, `verifyingContract`) and Casper-native fields (`chain_name`, `contract_package_hash`), making it suitable for hybrid environments where Casper contracts verify attestations originating from EVM chains — or where multiple Casper deployments (testnet, mainnet, staging) must be cryptographically isolated from each other. When using the Casper-native domain, `chain_name` must follow the [CAIP-2](https://github.com/ChainAgnostic/namespaces/blob/main/casper/caip2.md) format (`casper:<chainspec_name>`).
+This crate's `DomainBuilder` supports both standard EVM fields (`chainId`, `verifyingContract`) and Casper-native fields (`chain_name`, `contract_package_hash`), making it suitable for hybrid environments where Casper contracts verify attestations originating from EVM chains — or where multiple Casper deployments (testnet, mainnet, staging) must be cryptographically isolated from each other. When using the Casper-native domain, `chain_name` is recommended to follow the [CAIP-2](https://github.com/ChainAgnostic/namespaces/blob/main/casper/caip2.md) format (`casper:<chainspec_name>`).
 
 ## Feature flags
 
