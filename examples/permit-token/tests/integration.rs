@@ -68,7 +68,7 @@ fn casper_domain(token: &PermitTokenHostRef) -> DomainSeparator {
     DomainBuilder::new()
         .name(TOKEN_NAME)
         .version(DOMAIN_VERSION)
-        .custom_field("chain_name", DomainFieldValue::String("casper".into()))
+        .custom_field("chain_name", DomainFieldValue::String("casper:casper".into()))
         .custom_field("contract_package_hash", DomainFieldValue::Bytes32(contract_bytes(token.address())))
         .build()
 }

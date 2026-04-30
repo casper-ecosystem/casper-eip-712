@@ -144,13 +144,15 @@ impl Eip712Struct for Attestation {
 
 ## Casper-native domain example
 
+The `chain_name` field is recommended to be a [CAIP-2](https://github.com/ChainAgnostic/namespaces/blob/main/casper/caip2.md) chain id of the form `casper:<chainspec_name>` — for example `casper:casper` for mainnet and `casper:casper-test` for testnet. Using the canonical CAIP-2 form keeps Casper domain separators interoperable with multi-chain wallets and tooling.
+
 ```rust
 use casper_eip_712::prelude::*;
 
 let domain = DomainBuilder::new()
     .name("Bridge")
     .version("1")
-    .custom_field("chain_name", DomainFieldValue::String("casper-test".into()))
+    .custom_field("chain_name", DomainFieldValue::String("casper:casper-test".into()))
     .custom_field("contract_package_hash", DomainFieldValue::Bytes32([0x99; 32]))
     .build();
 ```
@@ -198,7 +200,7 @@ EIP-712 domain separators solve this by binding every signature to a specific:
 - **Chain** (chain ID or chain name)
 - **Version** (protocol version for upgrade safety)
 
-This crate's `DomainBuilder` supports both standard EVM fields (`chainId`, `verifyingContract`) and Casper-native fields (`chain_name`, `contract_package_hash`), making it suitable for hybrid environments where Casper contracts verify attestations originating from EVM chains — or where multiple Casper deployments (testnet, mainnet, staging) must be cryptographically isolated from each other.
+This crate's `DomainBuilder` supports both standard EVM fields (`chainId`, `verifyingContract`) and Casper-native fields (`chain_name`, `contract_package_hash`), making it suitable for hybrid environments where Casper contracts verify attestations originating from EVM chains — or where multiple Casper deployments (testnet, mainnet, staging) must be cryptographically isolated from each other. When using the Casper-native domain, `chain_name` is recommended to follow the [CAIP-2](https://github.com/ChainAgnostic/namespaces/blob/main/casper/caip2.md) format (`casper:<chainspec_name>`).
 
 ## Feature flags
 

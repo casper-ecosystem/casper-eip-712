@@ -97,7 +97,7 @@ permit(
 - CSPRClick uses **secp256k1** keys. The library's `recoverTypedDataSigner` returns an Ethereum-style hex address derived from the public key.
 - The `verifyingContract` field in the domain must be the Casper contract's `contract_package_hash` encoded as a 32-byte EVM-style address (`0x` + 32 bytes hex).
 - Chain IDs: `1514` = Casper mainnet, `1515` = Casper testnet.
-- For Casper-native domain (non-EVM), replace the `chainId`/`verifyingContract` pair with `chain_name`/`contract_package_hash` and pass `CASPER_DOMAIN_TYPES` as the domain type definition.
+- For Casper-native domain (non-EVM), replace the `chainId`/`verifyingContract` pair with `chain_name`/`contract_package_hash` and pass `CASPER_DOMAIN_TYPES` as the domain type definition. `chain_name` is recommended to be a [CAIP-2](https://github.com/ChainAgnostic/namespaces/blob/main/casper/caip2.md) chain id of the form `casper:<chainspec_name>` (e.g. `casper:casper` for mainnet, `casper:casper-test` for testnet).
 
 ## References
 
