@@ -5,7 +5,7 @@
 //
 // # Quick start
 //
-//	domain := eip712.BuildDomain("MyToken", "1", "casper-test",
+//	domain := eip712.BuildDomain("MyToken", "1", "casper:casper-test",
 //	    [32]byte{0x77, ...})
 //
 //	digest, err := eip712.HashTypedData(domain, prebuilt.PermitTypes, "Permit",
@@ -24,6 +24,11 @@
 // Use [BuildDomain] and pass [CasperDomainTypes] in [TypedDataOptions] to select
 // the Casper-native domain schema (chain_name + contract_package_hash) instead of
 // the standard Ethereum schema (chainId + verifyingContract).
+//
+// The chain_name field is recommended to be a CAIP-2 chain id of the form
+// "casper:<chainspec_name>" — for example "casper:casper" for mainnet and
+// "casper:casper-test" for testnet. See
+// https://github.com/ChainAgnostic/namespaces/blob/main/casper/caip2.md.
 //
 // # Signature verification
 //

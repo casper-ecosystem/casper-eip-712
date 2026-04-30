@@ -169,7 +169,7 @@ impl PermitToken {
             DomainBuilder::new()
                 .name(&name)
                 .version(&version)
-                .custom_field("chain_name", DomainFieldValue::String("casper".into()))
+                .custom_field("chain_name", DomainFieldValue::String("casper:casper".into()))
                 .custom_field(
                     "contract_package_hash",
                     DomainFieldValue::Bytes32(self.contract_package_hash_bytes()),

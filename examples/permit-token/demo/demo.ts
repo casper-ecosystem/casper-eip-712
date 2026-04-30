@@ -36,7 +36,7 @@ const evmDomain: EIP712Domain = {
 const casperDomain = {
   name: TOKEN_NAME,
   version: DOMAIN_VERSION,
-  chain_name: "casper",
+  chain_name: "casper:casper",
   contract_package_hash: CONTRACT_HASH,
 };
 
@@ -44,7 +44,7 @@ const casperDomainTypes: TypedField[] = CASPER_DOMAIN_TYPES;
 
 console.log("Step 2: Built EIP-712 domains");
 console.log(` EVM domain: name=\"${TOKEN_NAME}\", chainId=1314614895`);
-console.log(` Casper domain: name=\"${TOKEN_NAME}\", chain_name=\"casper\"`);
+console.log(` Casper domain: name=\"${TOKEN_NAME}\", chain_name=\"casper:casper\"`);
 console.log(` EVM separator: ${toHex(hashDomainSeparator(evmDomain))}`);
 console.log(` Casper separator: ${toHex(hashDomainSeparator(casperDomain, casperDomainTypes))}\n`);
 

@@ -8,13 +8,13 @@ describe("domain", () => {
       buildDomain(
         "CasperToken",
         "1",
-        "casper-test",
+        "casper:casper-test",
         "0x7777777777777777777777777777777777777777777777777777777777777777",
       ),
     ).toEqual({
       name: "CasperToken",
       version: "1",
-      chain_name: "casper-test",
+      chain_name: "casper:casper-test",
       contract_package_hash: "0x7777777777777777777777777777777777777777777777777777777777777777",
     });
   });
@@ -39,7 +39,7 @@ describe("domain", () => {
   });
 
   it("custom Casper domain with explicit types", () => {
-    const domain = { name: "Test", chain_name: "casper-test", contract_package_hash: "0x" + "77".repeat(32) };
+    const domain = { name: "Test", chain_name: "casper:casper-test", contract_package_hash: "0x" + "77".repeat(32) };
     const domainTypes = [
       { name: "name", type: "string" },
       { name: "chain_name", type: "string" },
@@ -68,12 +68,12 @@ describe("domain", () => {
     const domain = buildDomain(
       "CasperToken",
       "1",
-      "casper-test",
+      "casper:casper-test",
       "0x7777777777777777777777777777777777777777777777777777777777777777",
     );
     const hash = hashDomainSeparator(domain, CASPER_DOMAIN_TYPES);
     expect(toHex(hash)).toBe(
-      "0xb277bd5cc55f7517eaa22010c78cd3e74387ded279c8e3f8f29cc5ea31f2a402"
+      "0x488cd1d6726df2bcee44969efe9fc945d057e1706bffa93a292fefca5a790b66"
     );
   });
 

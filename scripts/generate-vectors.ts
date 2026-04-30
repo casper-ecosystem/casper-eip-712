@@ -194,7 +194,7 @@ const vectors: Vector[] = [
     {
       name: "CasperToken",
       version: "1",
-      chain_name: "casper-test",
+      chain_name: "casper:casper-test",
       contract_package_hash:
         "0x7777777777777777777777777777777777777777777777777777777777777777",
     },
@@ -219,7 +219,7 @@ const vectors: Vector[] = [
     {
       name: "CasperToken",
       version: "1",
-      chain_name: "casper-test",
+      chain_name: "casper:casper-test",
       contract_package_hash:
         "0x7777777777777777777777777777777777777777777777777777777777777777",
     },
