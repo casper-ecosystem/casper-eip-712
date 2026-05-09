@@ -9,6 +9,7 @@
 - Flexible `DomainBuilder` with standard EVM fields and custom Casper-native fields
 - Prebuilt `Permit`, `Approval`, and `Transfer` structs
 - Optional `verify` feature for signer recovery and verification
+- Optional `casper-native` feature: Casper PublicKey verification + `TransferAuthorization` / `BatchTransferAuthorization` structs (v1.2.0+)
 - Companion TypeScript and Go packages for application integration
 - Shared cross-language vectors to keep Rust, TypeScript, and Go outputs in sync
 
@@ -204,6 +205,91 @@ This crate's `DomainBuilder` supports both standard EVM fields (`chainId`, `veri
 
 - default: minimal hashing/encoding support
 - `verify`: enables secp256k1 signer recovery via `k256`
+- `casper-native`: Casper Network native signer verification + authorized transfer structs (see below)
+
+## `casper-native` feature (v1.2.0+)
+
+Enable in `Cargo.toml`:
+
+```toml
+casper-eip-712 = { version = "1.2.0", features = ["casper-native"] }
+```
+
+Requires `casper-types` v7 (added automatically as a dependency when the feature is enabled).
+
+### Verify a Casper signer
+
+```rust
+use casper_eip_712::prelude::*;
+use casper_eip_712::casper_native::verify_casper_signer;
+use casper_types::{PublicKey, Signature};
+
+// domain and my_struct are your EIP-712 domain separator and typed struct
+// public_key and signature come from the Casper transaction/contract call
+
+// Verify signature and check that the signer matches the expected `from` field.
+// Returns Ok(AccountHash) on success.
+let account_hash = verify_casper_signer(
+    &domain,
+    &my_struct,
+    &public_key,
+    &signature,
+    Some(&expected_from),  // optional: verify AccountHash matches
+).expect("verification failed");
+```
+
+### `TransferAuthorization` (EIP-3009-style)
+
+```rust
+use casper_eip_712::prelude::*;
+use casper_eip_712::casper_native::{TransferAuthorization, BatchTransferAuthorization, BatchEntry};
+
+// Single authorized transfer
+let auth = TransferAuthorization {
+    from: [0x11; 32],   // 32-byte AccountHash
+    to: [0x22; 32],     // 32-byte AccountHash
+    value: [0u8; 32],   // U256 big-endian
+    valid_after: 0,     // Unix timestamp (u64)
+    valid_before: 9_999_999_999,
+    nonce: [0xAA; 32],
+};
+let digest = hash_typed_data(&domain, &auth);
+
+// Multi-transfer for x402 payment flows
+let batch = BatchTransferAuthorization {
+    from: [0x11; 32],
+    transfers: vec![
+        BatchEntry { to: [0x22; 32], value: [0u8; 32] },
+        BatchEntry { to: [0x33; 32], value: [0u8; 32] },
+    ],
+    valid_after: 0,
+    valid_before: 9_999_999_999,
+    nonce: [0xBB; 32],
+};
+```
+
+### TypeScript companion (`@casper-ecosystem/casper-eip-712` v1.2.0+)
+
+```typescript
+import {
+  TransferAuthorizationTypes,
+  BatchTransferAuthorizationTypes,
+  hashTypedData,
+  type TransferAuthorizationMessage,
+  type BatchTransferAuthorizationMessage,
+} from "@casper-ecosystem/casper-eip-712";
+
+const auth: TransferAuthorizationMessage = {
+  from: "0x" + "11".repeat(32),   // 32-byte AccountHash hex
+  to: "0x" + "22".repeat(32),
+  value: 0n,
+  valid_after: 0n,
+  valid_before: 9_999_999_999n,
+  nonce: "0x" + "aa".repeat(32),
+};
+
+const digest = hashTypedData(domain, TransferAuthorizationTypes, "TransferAuthorization", auth);
+```
 
 ## no_std
 
