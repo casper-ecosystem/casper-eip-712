@@ -220,59 +220,75 @@ Requires `casper-types` v7 (added automatically as a dependency when the feature
 ### Verify a Casper signer
 
 ```rust
-#[cfg(feature = "casper-native")]
+use casper_eip_712::prelude::*;
 use casper_eip_712::casper_native::verify_casper_signer;
+use casper_types::{PublicKey, Signature};
 
-let digest: [u8; 32] = hash_typed_data(&domain, &my_struct);
-let signature_hex = "01abcd..."; // 65-byte secp256k1 or 64-byte ed25519 signature hex
-let public_key_hex = "01abcd..."; // Casper PublicKey hex (02... for secp256k1, 01... for ed25519)
+// domain and my_struct are your EIP-712 domain separator and typed struct
+// public_key and signature come from the Casper transaction/contract call
 
-let is_valid: bool = verify_casper_signer(&digest, signature_hex, public_key_hex)
-    .expect("verification failed");
+// Verify signature and check that the signer matches the expected `from` field.
+// Returns Ok(AccountHash) on success.
+let account_hash = verify_casper_signer(
+    &domain,
+    &my_struct,
+    &public_key,
+    &signature,
+    Some(&expected_from),  // optional: verify AccountHash matches
+).expect("verification failed");
 ```
 
 ### `TransferAuthorization` (EIP-3009-style)
 
 ```rust
-#[cfg(feature = "casper-native")]
-use casper_eip_712::casper_native::{TransferAuthorization, BatchTransferAuthorization};
+use casper_eip_712::prelude::*;
+use casper_eip_712::casper_native::{TransferAuthorization, BatchTransferAuthorization, BatchEntry};
 
 // Single authorized transfer
 let auth = TransferAuthorization {
-    from: [0x11; 20],
-    to: [0x22; 20],
-    value: [0u8; 32],
-    valid_after: [0u8; 32],
-    valid_before: [0xFFu8; 32],
-    nonce: [0xAAu8; 32],
+    from: [0x11; 32],   // 32-byte AccountHash
+    to: [0x22; 32],     // 32-byte AccountHash
+    value: [0u8; 32],   // U256 big-endian
+    valid_after: 0,     // Unix timestamp (u64)
+    valid_before: 9_999_999_999,
+    nonce: [0xAA; 32],
 };
 let digest = hash_typed_data(&domain, &auth);
 
 // Multi-transfer for x402 payment flows
 let batch = BatchTransferAuthorization {
-    from: [0x11; 20],
-    transfers: vec![auth],
-    valid_after: [0u8; 32],
-    valid_before: [0xFFu8; 32],
-    nonce: [0xBBu8; 32],
+    from: [0x11; 32],
+    transfers: vec![
+        BatchEntry { to: [0x22; 32], value: [0u8; 32] },
+        BatchEntry { to: [0x33; 32], value: [0u8; 32] },
+    ],
+    valid_after: 0,
+    valid_before: 9_999_999_999,
+    nonce: [0xBB; 32],
 };
 ```
 
 ### TypeScript companion (`@casper-ecosystem/casper-eip-712` v1.2.0+)
 
 ```typescript
-import { TransferAuthorization, BatchTransferAuthorization, hashTypedData } from "@casper-ecosystem/casper-eip-712";
+import {
+  TransferAuthorizationTypes,
+  BatchTransferAuthorizationTypes,
+  hashTypedData,
+  type TransferAuthorizationMessage,
+  type BatchTransferAuthorizationMessage,
+} from "@casper-ecosystem/casper-eip-712";
 
-const auth: TransferAuthorization = {
-  from: "0x1111111111111111111111111111111111111111",
-  to: "0x2222222222222222222222222222222222222222",
+const auth: TransferAuthorizationMessage = {
+  from: "0x" + "11".repeat(32),   // 32-byte AccountHash hex
+  to: "0x" + "22".repeat(32),
   value: 0n,
-  validAfter: 0n,
-  validBefore: BigInt("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"),
-  nonce: new Uint8Array(32),
+  valid_after: 0n,
+  valid_before: 9_999_999_999n,
+  nonce: "0x" + "aa".repeat(32),
 };
 
-const digest = hashTypedData(domain, auth);
+const digest = hashTypedData(domain, TransferAuthorizationTypes, "TransferAuthorization", auth);
 ```
 
 ## no_std
