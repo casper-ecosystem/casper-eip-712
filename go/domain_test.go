@@ -22,7 +22,7 @@ func strPtr(s string) *string { return &s }
 func bigPtr(i int64) *big.Int { return big.NewInt(i) }
 
 func TestBuildDomainTypeStringCasper(t *testing.T) {
-	domain := eip712.BuildDomain("MyToken", "1", "casper-test",
+	domain := eip712.BuildDomain("MyToken", "1", "casper:casper-test",
 		mustBytes32("0x7777777777777777777777777777777777777777777777777777777777777777"))
 	got := eip712.BuildDomainTypeString(domain,
 		&eip712.TypedDataOptions{DomainTypes: eip712.CasperDomainTypes})
@@ -158,7 +158,7 @@ func TestHashDomainSeparatorExplicitChainIdNilErrors(t *testing.T) {
 }
 
 func TestHashDomainSeparatorDeterministic(t *testing.T) {
-	domain := eip712.BuildDomain("A", "1", "casper", mustBytes32("0x"+strings.Repeat("aa", 32)))
+	domain := eip712.BuildDomain("A", "1", "casper:casper", mustBytes32("0x"+strings.Repeat("aa", 32)))
 	opts := &eip712.TypedDataOptions{DomainTypes: eip712.CasperDomainTypes}
 	a, err := eip712.HashDomainSeparator(domain, opts)
 	if err != nil {

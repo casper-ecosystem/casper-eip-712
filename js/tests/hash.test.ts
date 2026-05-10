@@ -99,7 +99,7 @@ describe("hashTypedData", () => {
     const domain = buildDomain(
       "CasperToken",
       "1",
-      "casper-test",
+      "casper:casper-test",
       "0x7777777777777777777777777777777777777777777777777777777777777777",
     );
 
