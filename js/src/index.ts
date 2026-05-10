@@ -1,4 +1,5 @@
 export { hashTypedData, hashTypedDataRaw, hashStruct } from "./hash.js";
+export { buildCanonicalTypeString } from "./type-string.js";
 export { buildDomain, hashDomainSeparator, buildDomainTypeString, CASPER_DOMAIN_TYPES } from "./domain.js";
 export { computeTypeHash } from "./type-hash.js";
 
@@ -24,6 +25,11 @@ export {
   type PermitMessage,
   type ApprovalMessage,
   type TransferMessage,
+  TransferAuthorizationTypes,
+  BatchTransferAuthorizationTypes,
+  type TransferAuthorizationMessage,
+  type BatchEntryMessage,
+  type BatchTransferAuthorizationMessage,
 } from "./prebuilt/index.js";
 
 export type { EIP712Domain, CasperDomain, TypedField, TypeDefinitions, TypedDataOptions } from "./types.js";
