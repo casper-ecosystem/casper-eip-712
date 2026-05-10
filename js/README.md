@@ -46,13 +46,15 @@ const isValid = verifySignature(digest, signature, "0xaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 If your domain uses Casper-specific fields such as `chain_name` or `contract_package_hash`, pass explicit `domainTypes` so the package knows the intended domain schema.
 
+The `chain_name` field is recommended to be a [CAIP-2](https://github.com/ChainAgnostic/namespaces/blob/main/casper/caip2.md) chain id of the form `casper:<chainspec_name>` — for example `casper:casper` for mainnet and `casper:casper-test` for testnet.
+
 ```ts
 import { hashTypedData } from "@casper-ecosystem/casper-eip-712";
 
 const domain = {
   name: "CSPR",
   version: "1",
-  chain_name: "casper-test",
+  chain_name: "casper:casper-test",
   contract_package_hash:
     "0x0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
 };
@@ -109,7 +111,7 @@ import {
 const domain = buildDomain(
   "CasperToken",
   "1",
-  "casper-test",
+  "casper:casper-test",
   "0x7777777777777777777777777777777777777777777777777777777777777777",
 );
 

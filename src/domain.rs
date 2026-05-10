@@ -191,7 +191,7 @@ mod tests {
     fn test_custom_fields_are_appended() {
         let domain = DomainBuilder::new()
             .name("Test")
-            .custom_field("chain_name", DomainFieldValue::String("casper-test".into()))
+            .custom_field("chain_name", DomainFieldValue::String("casper:casper-test".into()))
             .custom_field("contract_package_hash", DomainFieldValue::Bytes32([0x77; 32]))
             .build();
         assert_eq!(

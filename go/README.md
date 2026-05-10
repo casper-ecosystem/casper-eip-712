@@ -44,7 +44,9 @@ digest, err := eip712.HashTypedData(domain, prebuilt.PermitTypes, "Permit", msg.
 
 ## Casper-native domains
 
-For Casper-specific domains (`chain_name` + `contract_package_hash` instead of `chainId` + `verifyingContract`), use `BuildDomain` and pass `CasperDomainTypes` in the options:
+For Casper-specific domains (`chain_name` + `contract_package_hash` instead of `chainId` + `verifyingContract`), use `BuildDomain` and pass `CasperDomainTypes` in the options.
+
+The `chain_name` field is recommended to be a [CAIP-2](https://github.com/ChainAgnostic/namespaces/blob/main/casper/caip2.md) chain id of the form `casper:<chainspec_name>` — for example `casper:casper` for mainnet and `casper:casper-test` for testnet.
 
 ```go
 import (
@@ -58,7 +60,7 @@ raw, _ := hex.DecodeString("7777777777777777777777777777777777777777777777777777
 var contractPackageHash [32]byte
 copy(contractPackageHash[:], raw)
 
-domain := eip712.BuildDomain("CasperToken", "1", "casper-test", contractPackageHash)
+domain := eip712.BuildDomain("CasperToken", "1", "casper:casper-test", contractPackageHash)
 
 opts := &eip712.TypedDataOptions{DomainTypes: eip712.CasperDomainTypes}
 

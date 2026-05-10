@@ -1,6 +1,6 @@
 {
   "generatedBy": "ethers.TypedDataEncoder.hash",
-  "generatedAt": "2026-04-01T07:58:19.648Z",
+  "generatedAt": "2026-04-30T07:43:56.571Z",
   "vectors": [
     {
       "name": "permit_basic",
@@ -82,7 +82,7 @@
       "domain": {
         "name": "CasperToken",
         "version": "1",
-        "chain_name": "casper-test",
+        "chain_name": "casper:casper-test",
         "contract_package_hash": "0x7777777777777777777777777777777777777777777777777777777777777777"
       },
       "message": {
@@ -92,9 +92,9 @@
         "nonce": "0x0000000000000000000000000000000000000000000000000000000000000007",
         "deadline": "0x00000000000000000000000000000000000000000000000000000000000003e8"
       },
-      "domainSeparator": "0xb277bd5cc55f7517eaa22010c78cd3e74387ded279c8e3f8f29cc5ea31f2a402",
+      "domainSeparator": "0x488cd1d6726df2bcee44969efe9fc945d057e1706bffa93a292fefca5a790b66",
       "structHash": "0xc30ab2a82f3cd23da374d5dd2f26ae31ef36845f85443fe1bd7bce19c93bfd5f",
-      "digest": "0x86926c343a57cc86b90dd7bdd073a9d34193876cea31c082c3aaa2e64245fbfa"
+      "digest": "0x425eaec060f44670215f2d5e0d375febf3d2486ca06c48ddee6e4b63e2a4ccd9"
     },
     {
       "name": "casper_address_permit",
@@ -102,7 +102,7 @@
       "domain": {
         "name": "CasperToken",
         "version": "1",
-        "chain_name": "casper-test",
+        "chain_name": "casper:casper-test",
         "contract_package_hash": "0x7777777777777777777777777777777777777777777777777777777777777777"
       },
       "message": {
@@ -112,9 +112,9 @@
         "nonce": "0x0000000000000000000000000000000000000000000000000000000000000001",
         "deadline": "0x000000000000000000000000000000000000000000000000000000006666ffff"
       },
-      "domainSeparator": "0xb277bd5cc55f7517eaa22010c78cd3e74387ded279c8e3f8f29cc5ea31f2a402",
+      "domainSeparator": "0x488cd1d6726df2bcee44969efe9fc945d057e1706bffa93a292fefca5a790b66",
       "structHash": "0x3c9d714e753e49ba21597b4edd127090a9372023a4e5f2d79972af3b01c24535",
-      "digest": "0x2f870a4c5ac07483c1c9beae4fc1e0f2e3b01cacb9b60fb19a18b28fd0d5eade"
+      "digest": "0x455d22eedf146e59cac6b8b4fa5de7f4b03747e9f4acdc85cf09f54a0c922d84"
     },
     {
       "name": "approval_zero_value_edge",

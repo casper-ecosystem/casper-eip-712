@@ -17,7 +17,7 @@ This example wraps Odra's `Cep18` module and adds a `permit()` entrypoint that:
 The design is inspired by ERC-2612 / OpenZeppelin `ERC20Permit`, but adapted for Casper and demonstrated with both:
 
 - **EVM-compatible domain separation** — `name`, `version`, `chainId`, `verifyingContract`
-- **Casper-native domain separation** — `name`, `version`, `chain_name`, `contract_package_hash`
+- **Casper-native domain separation** — `name`, `version`, `chain_name`, `contract_package_hash` (where `chain_name` follows the [CAIP-2](https://github.com/ChainAgnostic/namespaces/blob/main/casper/caip2.md) format `casper:<chainspec_name>`, e.g. `casper:casper` for mainnet, `casper:casper-test` for testnet)
 
 ## File layout
 
@@ -87,7 +87,7 @@ fn build_domain(&self, use_casper_domain: bool) -> DomainSeparator {
         DomainBuilder::new()
             .name(&name)
             .version(&version)
-            .custom_field("chain_name", DomainFieldValue::String("casper".into()))
+            .custom_field("chain_name", DomainFieldValue::String("casper:casper".into()))
             .custom_field(
                 "contract_package_hash",
                 DomainFieldValue::Bytes32(self.contract_package_hash_bytes()),
