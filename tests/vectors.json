@@ -1,6 +1,6 @@
 {
   "generatedBy": "ethers.TypedDataEncoder.hash",
-  "generatedAt": "2026-04-30T07:43:56.571Z",
+  "generatedAt": "2026-05-22T14:08:18.176Z",
   "vectors": [
     {
       "name": "permit_basic",
@@ -18,6 +18,8 @@
         "nonce": "0x5555555555555555555555555555555555555555555555555555555555555555",
         "deadline": "0x6666666666666666666666666666666666666666666666666666666666666666"
       },
+      "typeString": "Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)",
+      "typeHash": "0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9",
       "domainSeparator": "0x98a000c59add584118697238deb65a508461c73c65bc49956fb97bfc568c30c8",
       "structHash": "0x2feca5389c256a1ed1a2562e50b5aa9eec5ae8008a2f365726ca552672a7a8f1",
       "digest": "0x647e5fecd3e0bae728bc3dae848eb34ca05f7972aec3274ba0b9388b123d1ba2"
@@ -36,6 +38,8 @@
         "spender": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
         "value": "0x0000000000000000000000000000000000000000000000000000000000001234"
       },
+      "typeString": "Approval(address owner,address spender,uint256 value)",
+      "typeHash": "0x9099bf5a210fca40ad25f8da4f9b4cacc7142bac2bb1f1e40181751009d2258e",
       "domainSeparator": "0x98a000c59add584118697238deb65a508461c73c65bc49956fb97bfc568c30c8",
       "structHash": "0xd918dfeea23ea023061f1ef4f5b02880a9a9c05368e2f7767362707a8a42bfbe",
       "digest": "0xd502b90a06968099a28fc5ba6bf88229e520e10df1a3c8ff9ee491be08860843"
@@ -54,6 +58,8 @@
         "to": "0x876543210fedcba9876543210fedcba987654321",
         "value": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
       },
+      "typeString": "Transfer(address from,address to,uint256 value)",
+      "typeHash": "0x22c9c571f8d7e6c74c09d4b09c57f62ea5bf8a94cd88c1f00594f032dc00cbc9",
       "domainSeparator": "0x98a000c59add584118697238deb65a508461c73c65bc49956fb97bfc568c30c8",
       "structHash": "0x75e9118f41a7ae89a89c88fe6701da973fec5cf60529ccdf0c706495be2f16e5",
       "digest": "0x6fc0796fa7d7b4b4c21e7aac8ce67d0ee4c7b6b747720f84b1d92c444dc5b90d"
@@ -72,6 +78,8 @@
         "nonce": "0x0000000000000000000000000000000000000000000000000000000000000001",
         "deadline": "0x0000000000000000000000000000000000000000000000000000000000000002"
       },
+      "typeString": "Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)",
+      "typeHash": "0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9",
       "domainSeparator": "0x87f1bf2ff60146d622e20172664a2e37fe378951779d41163fa8afe6c8dea56c",
       "structHash": "0xe0c8ba9cfb01b9d112bdbe7b4fc139c003ac282f00c5c2bbe007e3498afa3a67",
       "digest": "0x3edf425ca2303b2d4fbd74529751615f45a2140ee57d51afc3fd684f29df12a7"
@@ -92,6 +100,8 @@
         "nonce": "0x0000000000000000000000000000000000000000000000000000000000000007",
         "deadline": "0x00000000000000000000000000000000000000000000000000000000000003e8"
       },
+      "typeString": "Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)",
+      "typeHash": "0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9",
       "domainSeparator": "0x488cd1d6726df2bcee44969efe9fc945d057e1706bffa93a292fefca5a790b66",
       "structHash": "0xc30ab2a82f3cd23da374d5dd2f26ae31ef36845f85443fe1bd7bce19c93bfd5f",
       "digest": "0x425eaec060f44670215f2d5e0d375febf3d2486ca06c48ddee6e4b63e2a4ccd9"
@@ -112,9 +122,34 @@
         "nonce": "0x0000000000000000000000000000000000000000000000000000000000000001",
         "deadline": "0x000000000000000000000000000000000000000000000000000000006666ffff"
       },
+      "typeString": "Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)",
+      "typeHash": "0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9",
       "domainSeparator": "0x488cd1d6726df2bcee44969efe9fc945d057e1706bffa93a292fefca5a790b66",
       "structHash": "0x3c9d714e753e49ba21597b4edd127090a9372023a4e5f2d79972af3b01c24535",
       "digest": "0x455d22eedf146e59cac6b8b4fa5de7f4b03747e9f4acdc85cf09f54a0c922d84"
+    },
+    {
+      "name": "casper_transfer_with_authorization",
+      "primaryType": "TransferWithAuthorization",
+      "domain": {
+        "name": "CasperToken",
+        "version": "1",
+        "chain_name": "casper:casper-test",
+        "contract_package_hash": "0x7777777777777777777777777777777777777777777777777777777777777777"
+      },
+      "message": {
+        "from": "0x1234567890123456789012345678901234567890",
+        "to": "0xabcdef1234567890abcdef1234567890abcdef12",
+        "value": "0x000000000000000000000000000000000000000000000000000000000000002a",
+        "validAfter": "0x0000000000000000000000000000000000000000000000000000000000000000",
+        "validBefore": "0x00000000000000000000000000000000000000000000000000000000ffffffff",
+        "nonce": "0xabababababababababababababababababababababababababababababababab"
+      },
+      "typeString": "TransferWithAuthorization(address from,address to,uint256 value,uint256 validAfter,uint256 validBefore,bytes32 nonce)",
+      "typeHash": "0x7c7c6cdb67a18743f49ec6fa9b35f50d52ed05cbed4cc592e13b44501c1a2267",
+      "domainSeparator": "0x488cd1d6726df2bcee44969efe9fc945d057e1706bffa93a292fefca5a790b66",
+      "structHash": "0x30498052d4b856c2f6461af8162f03c402573367016c736111dc4f1e659d641f",
+      "digest": "0x8868576c5993b484967680e92f7d59bda3cdeb3e32443258479662866c604288"
     },
     {
       "name": "approval_zero_value_edge",
@@ -130,6 +165,8 @@
         "spender": "0xffffffffffffffffffffffffffffffffffffffff",
         "value": "0x0000000000000000000000000000000000000000000000000000000000000000"
       },
+      "typeString": "Approval(address owner,address spender,uint256 value)",
+      "typeHash": "0x9099bf5a210fca40ad25f8da4f9b4cacc7142bac2bb1f1e40181751009d2258e",
       "domainSeparator": "0xc5dd138840c9720804c795a98e76b5fe958225f40d0b0ddcb9aca43623525657",
       "structHash": "0x5e318dcc0ffbf49e946d69d7575ef834f4d53bc1c3c260431acf0522e41ae732",
       "digest": "0x8b81acf0287a023c651f2a7541e8df36856f9f5638433757486097ca1591183a"

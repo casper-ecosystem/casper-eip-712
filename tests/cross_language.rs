@@ -16,6 +16,7 @@ struct TestVector {
     primary_type: String,
     domain: Value,
     message: Value,
+    type_hash: String,
     domain_separator: String,
     struct_hash: String,
     digest: String,
@@ -42,6 +43,32 @@ fn get_str<'a>(value: &'a Value, field: &str) -> &'a str {
     value.get(field)
         .and_then(Value::as_str)
         .unwrap_or_else(|| panic!("missing string field {field}"))
+}
+
+struct TransferWithAuthorization {
+    from: Address,
+    to: Address,
+    value: [u8; 32],
+    valid_after: [u8; 32],
+    valid_before: [u8; 32],
+    nonce: [u8; 32],
+}
+
+impl Eip712Struct for TransferWithAuthorization {
+    fn type_string() -> &'static str {
+        "TransferWithAuthorization(address from,address to,uint256 value,uint256 validAfter,uint256 validBefore,bytes32 nonce)"
+    }
+
+    fn encode_data(&self) -> Vec<u8> {
+        let mut data = Vec::with_capacity(192);
+        data.extend_from_slice(&encode_address(self.from));
+        data.extend_from_slice(&encode_address(self.to));
+        data.extend_from_slice(&encode_uint256(self.value));
+        data.extend_from_slice(&encode_uint256(self.valid_after));
+        data.extend_from_slice(&encode_uint256(self.valid_before));
+        data.extend_from_slice(&encode_bytes32(self.nonce));
+        data
+    }
 }
 
 fn build_domain(domain: &Value) -> DomainSeparator {
@@ -86,7 +113,7 @@ fn vectors_match_ethers_reference_values() {
     for vector in vectors.vectors {
         let domain = build_domain(&vector.domain);
 
-        let actual_struct_hash = match vector.primary_type.as_str() {
+        let (actual_struct_hash, actual_type_hash) = match vector.primary_type.as_str() {
             "Permit" => {
                 let permit = Permit {
                     owner: parse_address(get_str(&vector.message, "owner")),
@@ -95,15 +122,13 @@ fn vectors_match_ethers_reference_values() {
                     nonce: parse_hex_array::<32>(get_str(&vector.message, "nonce")),
                     deadline: parse_hex_array::<32>(get_str(&vector.message, "deadline")),
                 };
-
                 assert_eq!(
                     hash_typed_data(&domain, &permit),
                     parse_hex_array::<32>(&vector.digest),
                     "typed data digest mismatch for {}",
                     vector.name
                 );
-
-                permit.hash_struct()
+                (permit.hash_struct(), Permit::type_hash())
             }
             "Approval" => {
                 let approval = Approval {
@@ -111,15 +136,13 @@ fn vectors_match_ethers_reference_values() {
                     spender: parse_address(get_str(&vector.message, "spender")),
                     value: parse_hex_array::<32>(get_str(&vector.message, "value")),
                 };
-
                 assert_eq!(
                     hash_typed_data(&domain, &approval),
                     parse_hex_array::<32>(&vector.digest),
                     "typed data digest mismatch for {}",
                     vector.name
                 );
-
-                approval.hash_struct()
+                (approval.hash_struct(), Approval::type_hash())
             }
             "Transfer" => {
                 let transfer = Transfer {
@@ -127,19 +150,40 @@ fn vectors_match_ethers_reference_values() {
                     to: parse_address(get_str(&vector.message, "to")),
                     value: parse_hex_array::<32>(get_str(&vector.message, "value")),
                 };
-
                 assert_eq!(
                     hash_typed_data(&domain, &transfer),
                     parse_hex_array::<32>(&vector.digest),
                     "typed data digest mismatch for {}",
                     vector.name
                 );
-
-                transfer.hash_struct()
+                (transfer.hash_struct(), Transfer::type_hash())
+            }
+            "TransferWithAuthorization" => {
+                let twa = TransferWithAuthorization {
+                    from: parse_address(get_str(&vector.message, "from")),
+                    to: parse_address(get_str(&vector.message, "to")),
+                    value: parse_hex_array::<32>(get_str(&vector.message, "value")),
+                    valid_after: parse_hex_array::<32>(get_str(&vector.message, "validAfter")),
+                    valid_before: parse_hex_array::<32>(get_str(&vector.message, "validBefore")),
+                    nonce: parse_hex_array::<32>(get_str(&vector.message, "nonce")),
+                };
+                assert_eq!(
+                    hash_typed_data(&domain, &twa),
+                    parse_hex_array::<32>(&vector.digest),
+                    "typed data digest mismatch for {}",
+                    vector.name
+                );
+                (twa.hash_struct(), TransferWithAuthorization::type_hash())
             }
             other => panic!("unsupported primary type {other} in {}", vector.name),
         };
 
+        assert_eq!(
+            actual_type_hash,
+            parse_hex_array::<32>(&vector.type_hash),
+            "type hash mismatch for {}",
+            vector.name
+        );
         assert_eq!(
             domain.separator_hash(),
             parse_hex_array::<32>(&vector.domain_separator),
