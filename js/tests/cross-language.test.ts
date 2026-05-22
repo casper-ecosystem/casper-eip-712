@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, it, expect } from "vitest";
-import { hashDomainSeparator, hashStruct, hashTypedData, toHex } from "../src/index.js";
+import { computeTypeHash, hashDomainSeparator, hashStruct, hashTypedData, toHex } from "../src/index.js";
 import type { TypedField, TypeDefinitions } from "../src/types.js";
 
 interface Vector {
@@ -10,6 +10,8 @@ interface Vector {
   primaryType: string;
   domain: Record<string, unknown>;
   message: Record<string, unknown>;
+  typeString: string;
+  typeHash: string;
   domainSeparator: string;
   structHash: string;
   digest: string;
@@ -50,6 +52,16 @@ const typeDefinitions: Record<string, TypeDefinitions> = {
       { name: "value", type: "uint256" },
     ],
   },
+  TransferWithAuthorization: {
+    TransferWithAuthorization: [
+      { name: "from", type: "address" },
+      { name: "to", type: "address" },
+      { name: "value", type: "uint256" },
+      { name: "validAfter", type: "uint256" },
+      { name: "validBefore", type: "uint256" },
+      { name: "nonce", type: "bytes32" },
+    ],
+  },
 };
 
 function getDomainTypes(vector: Vector): TypedField[] | undefined {
@@ -81,6 +93,11 @@ crossLanguageDescribe("cross-language vectors", () => {
         throw new Error(`Missing type definitions for primaryType \"${vector.primaryType}\" in cross-language test vectors`);
       }
       const domainTypes = getDomainTypes(vector);
+
+      it("type hash matches", () => {
+        const hash = computeTypeHash(vector.typeString);
+        expect(toHex(hash)).toBe(vector.typeHash);
+      });
 
       it("domain separator matches", () => {
         const hash = hashDomainSeparator(vector.domain, domainTypes);

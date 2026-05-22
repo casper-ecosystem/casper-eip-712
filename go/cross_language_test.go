@@ -24,6 +24,8 @@ type vector struct {
 	PrimaryType     string                 `json:"primaryType"`
 	Domain          map[string]interface{} `json:"domain"`
 	Message         map[string]interface{} `json:"message"`
+	TypeString      string                 `json:"typeString"`
+	TypeHash        string                 `json:"typeHash"`
 	DomainSeparator string                 `json:"domainSeparator"`
 	StructHash      string                 `json:"structHash"`
 	Digest          string                 `json:"digest"`
@@ -50,6 +52,10 @@ func TestCrossLanguageVectors(t *testing.T) {
 			domain := parseDomain(t, v.Domain)
 			opts := resolveOpts(v.Domain)
 			types, msg := resolveTypesAndMessage(t, v.PrimaryType, v.Message)
+
+			// Assert type hash
+			gotTypeHash := eip712.ComputeTypeHash(v.TypeString)
+			assertHex(t, "typeHash", eip712.ToHex(gotTypeHash[:]), v.TypeHash)
 
 			// Assert domain separator
 			gotSep, err := eip712.HashDomainSeparator(domain, opts)
@@ -169,6 +175,26 @@ func resolveTypesAndMessage(t *testing.T, primaryType string, raw map[string]int
 			"value": parseUint256(t, raw["value"]),
 		}
 		return prebuilt.TransferTypes, msg
+	case "TransferWithAuthorization":
+		msg := map[string]interface{}{
+			"from":        parseAddress(t, raw["from"]),
+			"to":          parseAddress(t, raw["to"]),
+			"value":       parseUint256(t, raw["value"]),
+			"validAfter":  parseUint256(t, raw["validAfter"]),
+			"validBefore": parseUint256(t, raw["validBefore"]),
+			"nonce":       parseBytes32(t, raw["nonce"]),
+		}
+		types := eip712.TypeDefinitions{
+			"TransferWithAuthorization": {
+				{Name: "from", Type: "address"},
+				{Name: "to", Type: "address"},
+				{Name: "value", Type: "uint256"},
+				{Name: "validAfter", Type: "uint256"},
+				{Name: "validBefore", Type: "uint256"},
+				{Name: "nonce", Type: "bytes32"},
+			},
+		}
+		return types, msg
 	default:
 		t.Fatalf("unknown primaryType %q", primaryType)
 		return nil, nil
@@ -204,6 +230,21 @@ func parseUint256(t *testing.T, v interface{}) *big.Int {
 		t.Fatalf("parseUint256: unexpected type %T", v)
 		return nil
 	}
+}
+
+func parseBytes32(t *testing.T, v interface{}) [32]byte {
+	t.Helper()
+	s, ok := v.(string)
+	if !ok {
+		t.Fatalf("bytes32 value is not a string: %T", v)
+	}
+	b, err := eip712.FromHex(s)
+	if err != nil || len(b) != 32 {
+		t.Fatalf("parseBytes32(%q): expected 32-byte hex", s)
+	}
+	var arr [32]byte
+	copy(arr[:], b)
+	return arr
 }
 
 func parseJSONNumber(t *testing.T, v interface{}) *big.Int {

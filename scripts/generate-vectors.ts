@@ -14,6 +14,8 @@ type Vector = {
   primaryType: string;
   domain: Record<string, unknown>;
   message: Record<string, unknown>;
+  typeString: string;
+  typeHash: string;
   domainSeparator: string;
   structHash: string;
   digest: string;
@@ -67,11 +69,14 @@ function standardVector(
   types: Record<string, Field[]>,
   message: Record<string, unknown>,
 ): Vector {
+  const ts = typeString(primaryType, types[primaryType]);
   return {
     name,
     primaryType,
     domain,
     message,
+    typeString: ts,
+    typeHash: keccak256(toUtf8Bytes(ts)),
     domainSeparator: TypedDataEncoder.hashDomain(domain),
     structHash: TypedDataEncoder.from(types).hash(message),
     digest: TypedDataEncoder.hash(domain, types, message),
@@ -86,6 +91,7 @@ function customDomainVector(
   messageFields: Field[],
   message: Record<string, unknown>,
 ): Vector {
+  const ts = typeString(primaryType, messageFields);
   const domainSeparator = manualStructHash("EIP712Domain", domainFields, domain);
   const structHash = manualStructHash(primaryType, messageFields, message);
 
@@ -94,6 +100,8 @@ function customDomainVector(
     primaryType,
     domain,
     message,
+    typeString: ts,
+    typeHash: keccak256(toUtf8Bytes(ts)),
     domainSeparator,
     structHash,
     digest: manualTypedDataDigest(domainSeparator, structHash),
@@ -118,6 +126,15 @@ const transferFields: Field[] = [
   { name: "from", type: "address" },
   { name: "to", type: "address" },
   { name: "value", type: "uint256" },
+];
+
+const transferWithAuthorizationFields: Field[] = [
+  { name: "from", type: "address" },
+  { name: "to", type: "address" },
+  { name: "value", type: "uint256" },
+  { name: "validAfter", type: "uint256" },
+  { name: "validBefore", type: "uint256" },
+  { name: "nonce", type: "bytes32" },
 ];
 
 const vectors: Vector[] = [
@@ -238,6 +255,32 @@ const vectors: Vector[] = [
       value: "0x000000000000000000000000000000000000000000000000000000000000002a",
       nonce: "0x0000000000000000000000000000000000000000000000000000000000000001",
       deadline: "0x000000000000000000000000000000000000000000000000000000006666ffff",
+    },
+  ),
+  customDomainVector(
+    "casper_transfer_with_authorization",
+    "TransferWithAuthorization",
+    {
+      name: "CasperToken",
+      version: "1",
+      chain_name: "casper:casper-test",
+      contract_package_hash:
+        "0x7777777777777777777777777777777777777777777777777777777777777777",
+    },
+    [
+      { name: "name", type: "string" },
+      { name: "version", type: "string" },
+      { name: "chain_name", type: "string" },
+      { name: "contract_package_hash", type: "bytes32" },
+    ],
+    transferWithAuthorizationFields,
+    {
+      from: "0x1234567890123456789012345678901234567890",
+      to: "0xabcdef1234567890abcdef1234567890abcdef12",
+      value: "0x000000000000000000000000000000000000000000000000000000000000002a",
+      validAfter: "0x0000000000000000000000000000000000000000000000000000000000000000",
+      validBefore: "0x00000000000000000000000000000000000000000000000000000000ffffffff",
+      nonce: "0x" + "ab".repeat(32),
     },
   ),
   standardVector(
